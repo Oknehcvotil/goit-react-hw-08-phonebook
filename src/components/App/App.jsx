@@ -9,6 +9,12 @@ import { getContacts, getError, getIsLoading } from 'redux/selector';
 import { useEffect } from 'react';
 import { getContactsThunk } from 'redux/thunk';
 import Loader from 'components/Loader';
+import { Route, Routes } from 'react-router-dom';
+import HomePage from 'pages/HomePage';
+import LoginPage from 'pages/LoginPage';
+import RegistratePage from 'pages/RegistratePage';
+import ContactsPage from 'pages/ContactsPage';
+import Layout from 'components/Layout';
 
 const App = () => {
   const dispatch = useDispatch();
@@ -35,6 +41,15 @@ const App = () => {
       {error && toast.error(`Ooops, ${error}`)}
       {isLoading && !error && <Loader />}
       <ToastContainer position="top-right" autoClose={3000} />
+
+      <Routes>
+        <Route path="/" element={Layout}>
+          <Route index element={HomePage} />
+          <Route path="login" element={LoginPage} />
+          <Route path="register" element={RegistratePage} />
+          <Route path="contacts" element={ContactsPage} />
+        </Route>
+      </Routes>
     </>
   );
 };
