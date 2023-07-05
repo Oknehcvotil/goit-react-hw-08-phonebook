@@ -15,8 +15,11 @@ import LoginPage from 'pages/LoginPage';
 import RegistratePage from 'pages/RegistratePage';
 import ContactsPage from 'pages/ContactsPage';
 import Layout from 'components/Layout';
+import { useSelector } from 'react-redux';
 
 const App = () => {
+  const isAuth = useSelector(state => state.auth.token);
+
   // const dispatch = useDispatch();
   // const contacts = useSelector(getContacts);
   // const isLoading = useSelector(getIsLoading);

@@ -1,25 +1,22 @@
 import axios from 'axios';
 
-const instance = axios.create({
-  baseURL: 'https://connections-api.herokuapp.com',
-});
+const URL = 'https://connections-api.herokuapp.com';
 
 const setToken = token => {
-  instance.defaults.headers.common['Authorizations'] = token;
-  console.log(instance.defaults.headers.common['Authorizations']);
+  axios.defaults.headers.common.Authorization = token;
 };
 
 export const delToken = token => {
-  delete instance.defaults.headers.common['Authorizations'];
+  delete axios.defaults.headers.common.Authorization;
 };
 
 export const signUp = async body => {
-  const response = await instance.post(`/users/signup`, body);
+  const response = await axios.post(`${URL}/users/signup`, body);
   return response;
 };
 
 export const logIn = async body => {
-  const { data } = await instance.post(`/users/login`, body);
+  const { data } = await axios.post(`${URL}/users/login`, body);
 
   setToken(`Bearer ${data.token}`);
 
@@ -27,13 +24,12 @@ export const logIn = async body => {
 };
 
 export const getProffile = async () => {
-  const response = await instance.get('/users/current');
-  console.log(response);
-  return response;
+  const { data } = await axios.get(`${URL}/users/current`);
+
+  return data;
 };
 
 export const logOut = async () => {
-  const response = await instance.post('/users/logout');
-  console.log(response);
-  return response;
+  const response = await axios.post(`${URL}/users/logout`);
+  delToken();
 };

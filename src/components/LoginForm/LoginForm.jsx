@@ -14,6 +14,7 @@ import { loginThunk } from 'redux/auth/thunk';
 
 const LoginForm = () => {
   const isAuth = useSelector(state => state.auth.token);
+
   const navigate = useNavigate();
 
   const dispatch = useDispatch();
