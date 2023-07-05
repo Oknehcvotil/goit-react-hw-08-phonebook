@@ -1,44 +1,18 @@
 import { createSlice, isAnyOf } from '@reduxjs/toolkit';
 import { getProfileThunk, loginThunk, logOutThunk } from './thunk';
-
-const authState = {
-  token: '',
-  profile: null,
-  isLoading: false,
-  error: '',
-};
-
-const handlePending = state => {
-  state.isLoading = true;
-};
-
-const handleFulfilled = (state, { payload }) => {
-  state.isLoading = false;
-  state.error = '';
-  state.token = payload.token;
-};
-
-const handleFulfilledProfile = (state, { payload }) => {
-  state.isLoading = false;
-  state.error = '';
-  state.profile = payload;
-};
-
-const handleFulfilledLogOut = (state, { payload }) => {
-  state.isLoading = false;
-  state.error = '';
-  state.profile = null;
-  state.token = '';
-};
-
-const handleRejected = (state, { payload }) => {
-  state.isLoading = false;
-  state.error = '';
-};
+import { initialAuth } from './initialState';
+import {
+  fn,
+  handlePending,
+  handleFulfilled,
+  handleFulfilledProfile,
+  handleFulfilledLogOut,
+  handleRejected,
+} from 'services/authFunctionSlice';
 
 const authSlice = createSlice({
   name: 'auth',
-  initialState: authState,
+  initialState: initialAuth,
   reducers: {
     logOut(state) {
       state.profile = null;
@@ -50,22 +24,8 @@ const authSlice = createSlice({
       .addCase(loginThunk.fulfilled, handleFulfilled)
       .addCase(getProfileThunk.fulfilled, handleFulfilledProfile)
       .addCase(logOutThunk.fulfilled, handleFulfilledLogOut)
-      .addMatcher(
-        isAnyOf(
-          loginThunk.pending,
-          getProfileThunk.pending,
-          logOutThunk.pending
-        ),
-        handlePending
-      )
-      .addMatcher(
-        isAnyOf(
-          loginThunk.rejected,
-          getProfileThunk.rejected,
-          logOutThunk.rejected
-        ),
-        handleRejected
-      );
+      .addMatcher(isAnyOf(...fn('pending')), handlePending)
+      .addMatcher(isAnyOf(...fn('rejected')), handleRejected);
   },
 });
 

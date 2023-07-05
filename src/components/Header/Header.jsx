@@ -4,10 +4,12 @@ import { Toolbar } from '@mui/material';
 import { Link, NavLink, useNavigate } from 'react-router-dom';
 import { useDispatch, useSelector } from 'react-redux';
 import { logOutThunk } from 'redux/auth/thunk';
-import { getProfileThunk } from 'redux/auth/thunk';
+// import { getProfileThunk } from 'redux/auth/thunk';
+import { getProfile } from 'redux/auth/selector';
 
 const Header = () => {
-  const { profile, token } = useSelector(state => state.auth);
+  const profile = useSelector(getProfile);
+  // const token = useSelector(getToken);
 
   const dispatch = useDispatch();
 
@@ -15,14 +17,13 @@ const Header = () => {
 
   const handleLogOut = () => {
     dispatch(logOutThunk());
+    navigate('/');
   };
 
-  React.useEffect(() => {
-    token && dispatch(getProfileThunk());
-    
-    navigate('/');
-    // eslint-disable-next-line
-  }, [token, dispatch]);
+  // React.useEffect(() => {
+  //   token && dispatch(getProfileThunk());
+
+  // }, [token, dispatch]);
 
   return (
     <AppBar

@@ -10,18 +10,24 @@ import LockPersonOutlinedIcon from '@mui/icons-material/LockPersonOutlined';
 import Typography from '@mui/material/Typography';
 import { useNavigate } from 'react-router-dom';
 import { useDispatch, useSelector } from 'react-redux';
-import { loginThunk } from 'redux/auth/thunk';
+import { getProfileThunk, loginThunk } from 'redux/auth/thunk';
+import { getErrorAuth, getIsLoadingAuth } from 'redux/auth/selector';
+import { toast } from 'react-toastify';
+import Loader from 'components/Loader';
+// import { getToken } from 'redux/auth/selector';
 
 const LoginForm = () => {
-  const isAuth = useSelector(state => state.auth.token);
+  // const isAuth = useSelector(getToken);
+  const error = useSelector(getErrorAuth);
+  const isLoading = useSelector(getIsLoadingAuth);
 
   const navigate = useNavigate();
 
   const dispatch = useDispatch();
 
-  React.useEffect(() => {
-    isAuth && navigate('/contacts');
-  }, [isAuth, navigate]);
+  // React.useEffect(() => {
+  //   isAuth && navigate('/contacts');
+  // }, [isAuth, navigate]);
 
   const handleSubmit = e => {
     e.preventDefault();
@@ -31,7 +37,14 @@ const LoginForm = () => {
         email: e.target.elements.email.value,
         password: e.target.elements.password.value,
       })
-    );
+    )
+      .unwrap()
+      .then(() => {
+        navigate('/contacts');
+        toast.success(`Welcome back`);
+        dispatch(getProfileThunk());
+      })
+      .catch(() => toast.error(`Ooops ${error}`));
   };
 
   return (
@@ -107,6 +120,7 @@ const LoginForm = () => {
           </Grid>
         </Box>
       </Box>
+      {isLoading && !error && <Loader />}
     </Grid>
   );
 };

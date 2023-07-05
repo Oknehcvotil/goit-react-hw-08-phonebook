@@ -16,7 +16,7 @@ const ContactList = () => {
 
   return (
     <List>
-      {visibleContacts.map(({ id, name, phone: number }) => (
+      {visibleContacts.map(({ id, name, number }) => (
         <ContactItem key={id} id={id} name={name} number={number} />
       ))}
     </List>

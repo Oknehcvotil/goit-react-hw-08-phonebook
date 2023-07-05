@@ -8,12 +8,19 @@ import Box from '@mui/material/Box';
 import Grid from '@mui/material/Grid';
 import LockPersonOutlinedIcon from '@mui/icons-material/LockPersonOutlined';
 import Typography from '@mui/material/Typography';
-import { signUp } from 'services/auth-service';
+import { signUp } from 'api/authApi';
 import { toast } from 'react-toastify';
 import { useNavigate } from 'react-router-dom';
+import { useDispatch, useSelector } from 'react-redux';
+import { getErrorAuth, getIsLoadingAuth } from 'redux/auth/selector';
+import Loader from 'components/Loader';
+import { getProfileThunk, loginThunk } from 'redux/auth/thunk';
 
 const RegistrateForm = () => {
   const navigate = useNavigate();
+  const error = useSelector(getErrorAuth);
+  const isLoading = useSelector(getIsLoadingAuth);
+  const dispatch = useDispatch();
 
   const handleSubmit = e => {
     e.preventDefault();
@@ -26,12 +33,20 @@ const RegistrateForm = () => {
 
     signUp(newUser)
       .then(() => {
-        toast.success(`User ${newUser.name} created`);
-        navigate('/login');
+        toast.success(`Congrats! User ${newUser.name} created`);
+        dispatch(
+          loginThunk({
+            email: newUser.email,
+            password: newUser.password,
+          })
+        )
+          .unwrap()
+          .then(() => {
+            navigate('/contacts');
+            dispatch(getProfileThunk());
+          });
       })
-      .catch(error => {
-        console.log(error);
-      });
+      .catch(() => toast.error(`Ooops.... ${error}`));
   };
 
   return (
@@ -117,6 +132,7 @@ const RegistrateForm = () => {
           </Grid>
         </Box>
       </Box>
+      {isLoading && !error && <Loader />}
     </Grid>
   );
 };
