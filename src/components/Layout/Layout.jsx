@@ -1,16 +1,20 @@
+import Header from 'components/Header';
 import { Suspense } from 'react';
 import { Outlet } from 'react-router-dom';
+import { Container } from '@mui/material';
 
 const Layout = () => {
   return (
-    <div>
-      <header></header>
-      <main>
-        <Suspense>
-          <Outlet />
-        </Suspense>
-      </main>
-    </div>
+    <>
+      <Header />
+      <Container maxWidth="sm">
+        <main>
+          <Suspense>
+            <Outlet />
+          </Suspense>
+        </main>
+      </Container>
+    </>
   );
 };
 

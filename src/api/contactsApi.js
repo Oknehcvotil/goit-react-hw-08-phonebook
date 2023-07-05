@@ -1,6 +1,6 @@
 import axios from 'axios';
 
-const URL = 'https://64945ca20da866a95367a336.mockapi.io';
+const URL = 'https://connections-api.herokuapp.com/';
 
 export const fetchContacts = async () => {
   const { data } = await axios.get(`${URL}/contacts`);
@@ -19,3 +19,4 @@ export const deleteContact = async id => {
 
   return data;
 };
+
