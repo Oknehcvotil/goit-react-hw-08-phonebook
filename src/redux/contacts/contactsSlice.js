@@ -7,9 +7,15 @@ import {
   handleFulfilledGet,
   handlePending,
   handleRejected,
+  handleFulfilledUpdate,
 } from 'services/functionSlice';
 import { initialContacts } from './initialState';
-import { addContactThunk, deleteContactThunk, getContactsThunk } from './thunk';
+import {
+  addContactThunk,
+  deleteContactThunk,
+  getContactsThunk,
+  updateContactThunk,
+} from './thunk';
 
 const contactsSlice = createSlice({
   name: 'contacts',
@@ -19,6 +25,7 @@ const contactsSlice = createSlice({
       .addCase(getContactsThunk.fulfilled, handleFulfilledGet)
       .addCase(addContactThunk.fulfilled, handleFulfilledAdd)
       .addCase(deleteContactThunk.fulfilled, handleFulfilledDelete)
+      .addCase(updateContactThunk.fulfilled, handleFulfilledUpdate)
       .addMatcher(isAnyOf(...fn('pending')), handlePending)
       .addMatcher(isAnyOf(...fn('rejected')), handleRejected)
       .addMatcher(isAnyOf(...fn('fulfilled')), handleFulfilled);

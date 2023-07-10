@@ -8,13 +8,12 @@ import Box from '@mui/material/Box';
 import Grid from '@mui/material/Grid';
 import LockPersonOutlinedIcon from '@mui/icons-material/LockPersonOutlined';
 import Typography from '@mui/material/Typography';
-import { signUp } from 'api/authApi';
 import { toast } from 'react-toastify';
 import { useNavigate } from 'react-router-dom';
 import { useDispatch, useSelector } from 'react-redux';
 import { getErrorAuth, getIsLoadingAuth } from 'redux/auth/selector';
 import Loader from 'components/Loader';
-import { getProfileThunk, loginThunk } from 'redux/auth/thunk';
+import { registerThunk } from 'redux/auth/thunk';
 
 const RegistrateForm = () => {
   const navigate = useNavigate();
@@ -31,22 +30,13 @@ const RegistrateForm = () => {
       password: e.target.elements.password.value,
     };
 
-    signUp(newUser)
+    dispatch(registerThunk(newUser))
+      .unwrap()
       .then(() => {
+        navigate('/');
         toast.success(`Congrats! User ${newUser.name} created`);
-        dispatch(
-          loginThunk({
-            email: newUser.email,
-            password: newUser.password,
-          })
-        )
-          .unwrap()
-          .then(() => {
-            navigate('/contacts');
-            dispatch(getProfileThunk());
-          });
       })
-      .catch(() => toast.error(`Ooops.... ${error}`));
+      .catch(() => toast.error(`Ooops ${error}`));
   };
 
   return (
@@ -115,9 +105,13 @@ const RegistrateForm = () => {
             id="password"
             autoComplete="current-password"
           />
-          <Button type="submit" variant="contained" sx={{ mt: 3, mb: 2 }}>
+          <Button
+            type="submit"
+            variant="contained"
+            size="large"
+            sx={{ mt: 3, mb: 2 }}
+          >
             Sign UP
-            {/* {authOperation === 'login' ? <AddLoader /> : <>Sign In</>} */}
           </Button>
           <Grid container justifyContent="center">
             <Grid item>

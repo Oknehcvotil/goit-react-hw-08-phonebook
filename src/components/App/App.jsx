@@ -8,9 +8,21 @@ import ContactsPage from 'pages/ContactsPage';
 import Layout from 'components/Layout';
 import PrivateRoute from 'components/Routes/PrivateRoute';
 import PublicRoute from 'components/Routes/PublicRoute';
+import { useDispatch, useSelector } from 'react-redux';
+import { useEffect } from 'react';
+import { getProfileThunk } from 'redux/auth/thunk';
+import { getIsRefreshing } from 'redux/auth/selector';
+import Loader from 'components/Loader';
 
 const App = () => {
-  return (
+  const dispatch = useDispatch();
+  const isRefreshing = useSelector(getIsRefreshing);
+
+  useEffect(() => {
+    dispatch(getProfileThunk());
+  }, [dispatch]);
+
+  return isRefreshing ? (<Loader/>) : (    
     <>
       <Routes>
         <Route path="/" element={<Layout />}>

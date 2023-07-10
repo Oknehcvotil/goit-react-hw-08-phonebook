@@ -19,3 +19,14 @@ export const deleteContact = async id => {
 
   return data;
 };
+
+export const updateContact = async ({ id, name, number }) => {
+  const { data } = await axios.patch(`${URL}/contacts/${id}`, {
+    name,
+    number,
+  });
+
+  console.log(data);
+
+  return data;
+};

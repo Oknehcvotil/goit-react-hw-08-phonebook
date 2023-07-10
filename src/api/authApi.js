@@ -2,17 +2,20 @@ import axios from 'axios';
 
 const URL = 'https://connections-api.herokuapp.com';
 
-const setToken = token => {
+export const setToken = token => {
   axios.defaults.headers.common.Authorization = token;
 };
 
 export const delToken = token => {
-  delete axios.defaults.headers.common.Authorization;
+  axios.defaults.headers.common.Authorization = '';
 };
 
 export const signUp = async body => {
-  const response = await axios.post(`${URL}/users/signup`, body);
-  return response;
+  const { data } = await axios.post(`${URL}/users/signup`, body);
+
+  setToken(`Bearer ${data.token}`);
+
+  return data;
 };
 
 export const logIn = async body => {
@@ -30,6 +33,7 @@ export const getProffile = async () => {
 };
 
 export const logOut = async () => {
-  const response = await axios.post(`${URL}/users/logout`);
+  await axios.post(`${URL}/users/logout`);
+
   delToken();
 };
