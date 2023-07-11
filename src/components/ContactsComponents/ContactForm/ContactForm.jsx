@@ -1,9 +1,10 @@
 import { useState } from 'react';
-import { Form, Label, Input, Btn } from './ContactForm.styled';
+
 import { useDispatch, useSelector } from 'react-redux';
 import { getContacts } from 'redux/contacts/selector';
 import { toast } from 'react-toastify';
 import { addContactThunk } from 'redux/contacts/thunk';
+import { Box, Button, TextField } from '@mui/material';
 
 const ContactForm = () => {
   const [name, setName] = useState('');
@@ -57,35 +58,52 @@ const ContactForm = () => {
   };
 
   return (
-    <Form onSubmit={handleSubmit}>
-      <Label>
-        Name
-        <Input
-          type="text"
-          name="name"
-          pattern="^[a-zA-Zа-яА-Я]+(([' \-][a-zA-Zа-яА-Я ])?[a-zA-Zа-яА-Я]*)*$"
-          title="Name may contain only letters, apostrophe, dash and spaces. For example Adrian, Jacob Mercer, Charles de Batz de Castelmore d'Artagnan"
-          required
-          onChange={handleChange}
-          value={name}
-        />
-      </Label>
+    <Box
+      component="form"
+      autoComplete="off"
+      noValidate
+      onSubmit={handleSubmit}
+      sx={{
+        display: 'flex',
+        flexDirection: 'column',
+        alignItems: 'center',
+      }}
+    >
+      <TextField
+        required
+        id="name"
+        label="Name"
+        name="name"
+        size="small"
+        pattern="^[a-zA-Zа-яА-Я]+(([' \-][a-zA-Zа-яА-Я ])?[a-zA-Zа-яА-Я]*)*$"
+        title="Name may contain only letters, apostrophe, dash and spaces. For example Adrian, Jacob Mercer, Charles de Batz de Castelmore d'Artagnan"
+        onChange={handleChange}
+        value={name}
+      />
 
-      <Label>
-        Number
-        <Input
-          type="tel"
-          name="number"
-          pattern="\+?\d{1,4}?[ .\-\s]?\(?\d{1,3}?\)?[ .\-\s]?\d{1,4}[ .\-\s]?\d{1,4}[ .\-\s]?\d{1,9}"
-          title="Phone number must be digits and can contain spaces, dashes, parentheses and can start with +"
-          required
-          onChange={handleChange}
-          value={number}
-        />
-      </Label>
+      <TextField
+        margin="normal"
+        required
+        type="tel"
+        id="number"
+        label="Phone Number"
+        name="number"
+        size="small"
+        pattern="\+?\d{1,4}?[ .\-\s]?\(?\d{1,3}?\)?[ .\-\s]?\d{1,4}[ .\-\s]?\d{1,4}[ .\-\s]?\d{1,9}"
+        title="Phone number must be digits and can contain spaces, dashes, parentheses and can start with +"
+        onChange={handleChange}
+        value={number}
+      />
 
-      <Btn type="submit">Add contact</Btn>
-    </Form>
+      <Button
+        type="submit"
+        variant="contained"
+        sx={{ mt: 2, mb: 2 }}
+        size="medium"
+      >
+        Add Contact
+      </Button>
+    </Box>
   );
 };
 

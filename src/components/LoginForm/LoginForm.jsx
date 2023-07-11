@@ -96,7 +96,12 @@ const LoginForm = () => {
             id="password"
             autoComplete="current-password"
           />
-          <Button type="submit" variant="contained" size="large" sx={{ mt: 3, mb: 2 }}>
+          <Button
+            type="submit"
+            variant="contained"
+            size="large"
+            sx={{ mt: 3, mb: 2 }}
+          >
             Sign In
           </Button>
           <Grid container justifyContent="center">

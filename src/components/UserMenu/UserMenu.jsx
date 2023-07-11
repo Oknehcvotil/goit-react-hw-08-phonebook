@@ -26,13 +26,7 @@ const UserMenu = () => {
       >
         Hello, {profile && profile.name}!
       </Typography>
-      <Btn
-        color="secondary"
-        size="small"
-        variant="outlined"
-        type="button"
-        onClick={handleLogOut}
-      >
+      <Btn type="button" onClick={handleLogOut}>
         Log Out
       </Btn>
     </UserMenuCont>

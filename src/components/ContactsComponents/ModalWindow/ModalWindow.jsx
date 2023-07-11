@@ -2,12 +2,13 @@ import * as React from 'react';
 import Box from '@mui/material/Box';
 import Button from '@mui/material/Button';
 import Modal from '@mui/material/Modal';
-import { Grid } from '@mui/material';
+import { Grid, TextField } from '@mui/material';
 import Loader from 'components/Loader';
 import { useDispatch, useSelector } from 'react-redux';
-import { getContacts, getError, getIsLoading } from 'redux/contacts/selector';
+import { getError, getIsLoading } from 'redux/contacts/selector';
 import { toast } from 'react-toastify';
 import { updateContactThunk } from 'redux/contacts/thunk';
+import PropTypes from 'prop-types';
 
 const style = {
   position: 'absolute',
@@ -24,7 +25,7 @@ const ModalWindow = ({ isOpen, id, name, number, onClose }) => {
   const [newNumber, setNewNumber] = React.useState(number);
   const dispatch = useDispatch();
   const isLoading = useSelector(getIsLoading);
-  const contacts = useSelector(getContacts);
+  // const contacts = useSelector(getContacts);
   const error = useSelector(getError);
 
   const handleChange = ({ target }) => {
@@ -46,16 +47,16 @@ const ModalWindow = ({ isOpen, id, name, number, onClose }) => {
   const handleEdit = async e => {
     e.preventDefault();
 
-    const duplicate = contacts.some(
-      contact =>
-        contact.name.toLowerCase() === name.toLowerCase() &&
-        contact.number === number
-    );
+    // const duplicate = contacts.some(
+    //   contact =>
+    //     contact.name.toLowerCase() === newName.toLowerCase() &&
+    //     contact.number === newNumber
+    // );
 
-    if (duplicate) {
-      toast.error(`${number} is already in contacts`);
-      return;
-    }
+    // if (duplicate) {
+    //   toast.error(`${number} is already in contacts`);
+    //   return;
+    // }
 
     if (newName === '' || newNumber === '') {
       toast.error('Fields are empty!');
@@ -70,9 +71,7 @@ const ModalWindow = ({ isOpen, id, name, number, onClose }) => {
 
     console.log(changedContact);
 
-    dispatch(
-      updateContactThunk(changedContact)
-    )
+    dispatch(updateContactThunk(changedContact))
       .unwrap()
       .then(() => {
         onClose();
@@ -85,60 +84,74 @@ const ModalWindow = ({ isOpen, id, name, number, onClose }) => {
   };
 
   return (
-    <Modal
-      open={isOpen}
-      onClose={onClose}
-      aria-labelledby="modal-modal-title"
-      aria-describedby="modal-modal-description"
-    >
-      <Box sx={{ ...style, width: { xs: 240, sm: 400 } }}>
-        <Box
-          component="form"
-          autoComplete="off"
-          noValidate
-          onSubmit={handleEdit}
-        >
-          <input
-            type="text"
-            name="name"
-            pattern="^[a-zA-Zа-яА-Я]+(([' \-][a-zA-Zа-яА-Я ])?[a-zA-Zа-яА-Я]*)*$"
-            title="Name may contain only letters, apostrophe, dash and spaces. For example Adrian, Jacob Mercer, Charles de Batz de Castelmore d'Artagnan"
-            required
-            onChange={handleChange}
-            value={newName}
-          />
-          <input
-            type="tel"
-            name="number"
-            pattern="\+?\d{1,4}?[ .\-\s]?\(?\d{1,3}?\)?[ .\-\s]?\d{1,4}[ .\-\s]?\d{1,4}[ .\-\s]?\d{1,9}"
-            title="Phone number must be digits and can contain spaces, dashes, parentheses and can start with +"
-            required
-            onChange={handleChange}
-            value={newNumber}
-          />
-
-          <Grid container justifyContent="center">
-            <Button
-              type="submit"
-              variant="contained"
-              sx={{ mt: 2, mb: 2, mr: 2 }}
-            >
-              {isLoading === 'update' ? <Loader /> : <>Save</>}
-            </Button>
-            <Button
-              type="button"
-              size="medium"
-              variant="outlined"
-              sx={{ mt: 2, mb: 2 }}
-              onClick={onClose}
-            >
-              Cancel
-            </Button>
-          </Grid>
+    <div>
+      <Modal
+        open={isOpen}
+        onClose={onClose}
+        aria-labelledby="modal-modal-title"
+        aria-describedby="modal-modal-description"
+      >
+        <Box sx={{ ...style, width: { xs: 240, sm: 400 } }}>
+          <Box
+            component="form"
+            autoComplete="off"
+            noValidate
+            onSubmit={handleEdit}
+          >
+            <TextField
+              margin="normal"
+              required
+              fullWidth
+              id="name"
+              label="Name"
+              name="name"
+              pattern="^[a-zA-Zа-яА-Я]+(([' \-][a-zA-Zа-яА-Я ])?[a-zA-Zа-яА-Я]*)*$"
+              onChange={handleChange}
+              value={newName}
+            />
+            <TextField
+              margin="normal"
+              required
+              fullWidth
+              type="tel"
+              id="number"
+              label="Phone Number"
+              name="number"
+              pattern="\+?\d{1,4}?[ .\-\s]?\(?\d{1,3}?\)?[ .\-\s]?\d{1,4}[ .\-\s]?\d{1,4}[ .\-\s]?\d{1,9}"
+              onChange={handleChange}
+              value={newNumber}
+            />
+            <Grid container justifyContent="center">
+              <Button
+                type="submit"
+                variant="contained"
+                sx={{ mt: 2, mb: 2, mr: 2 }}
+              >
+                Save
+              </Button>
+              <Button
+                type="button"
+                size="medium"
+                variant="outlined"
+                sx={{ mt: 2, mb: 2 }}
+                onClick={onClose}
+              >
+                Cancel
+              </Button>
+            </Grid>
+          </Box>
         </Box>
-      </Box>
-    </Modal>
+      </Modal>
+      {isLoading && <Loader />}
+    </div>
   );
+};
+
+ModalWindow.propTypes = {
+  isOpen: PropTypes.bool.isRequired,
+  id: PropTypes.string.isRequired,
+  name: PropTypes.string.isRequired,
+  number: PropTypes.string.isRequired,
 };
 
 export default ModalWindow;

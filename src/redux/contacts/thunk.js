@@ -18,4 +18,6 @@ export const deleteContactThunk = createAsyncThunk('contacts/delete', id =>
   deleteContact(id)
 );
 
-export const updateContactThunk = createAsyncThunk('contacts/update', data => updateContact(data));
+export const updateContactThunk = createAsyncThunk('contacts/update', data =>
+  updateContact(data)
+);

@@ -22,7 +22,9 @@ const App = () => {
     dispatch(getProfileThunk());
   }, [dispatch]);
 
-  return isRefreshing ? (<Loader/>) : (    
+  return isRefreshing ? (
+    <Loader />
+  ) : (
     <>
       <Routes>
         <Route path="/" element={<Layout />}>

@@ -15,7 +15,6 @@ const Home = () => {
   return (
     <>
       <Box
-        conponent="main"
         sx={{
           backgroundImage: `linear-gradient(rgba(47, 68, 158, 0.3), rgba(47, 48, 58, 0.3)), url(${phoneBookImg})`,
           backgroundRepeat: 'no-repeat',

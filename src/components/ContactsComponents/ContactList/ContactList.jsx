@@ -2,6 +2,7 @@ import ContactItem from 'components/ContactsComponents/ContactItem';
 import { List } from './ContactList.styled';
 import { getContacts, getFilter } from 'redux/contacts/selector';
 import { useSelector } from 'react-redux';
+import { Container } from '@mui/material';
 
 const getVisibleContacts = (contacts, filter) => {
   return contacts.filter(contact =>
@@ -15,11 +16,11 @@ const ContactList = () => {
   const visibleContacts = getVisibleContacts(contacts, filter);
 
   return (
-    <List>
+    <Container maxWidth="md" component="ul">
       {visibleContacts.map(({ id, name, number }) => (
         <ContactItem key={id} id={id} name={name} number={number} />
       ))}
-    </List>
+    </Container>
   );
 };
 
